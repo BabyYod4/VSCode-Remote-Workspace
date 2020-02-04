@@ -1,184 +1,140 @@
-[![Build Status](https://travis-ci.org/kigster/cmake-project-template.svg?branch=master)](https://travis-ci.org/kigster/cmake-project-template)
+# cmake-workspace
 
-# CMake C++ Project Template
+## Introduction:
+This is a simple cmake-template workspace to use in a CLI envoiment. The folder structure is as followed
+```bash
+├── bin --> contains executables
+├── build --> contains build files makde by cmake 
+├── CMakeLists.txt --> contain global variables, etc
+├── include --> contains external source code from include submodule
+│   ├── foo.cpp
+│   ├── foo.hpp
+│   └── test
+│       ├── test.cpp
+│       └── test.hpp
 
-### Division with a remainder library
+├── lib --> contain generated and used library files
+├── README.md
+├── run --> used to compile and execute code
+└── src --> conains all base source code
+    ├── CMakeLists.txt --> used to configure libary to work with source code 
+    └── main.cpp
+```
 
-Thank you for your interest in this project!
+## Before Usage:
 
-Are you just starting with `CMake` or C++?
+To use the workspace, you should take do the following. 
 
-Do you need some easy-to-use starting point, but one that has the basic moving parts you are likely going to need on any medium sized project?
+In the workspace folder: 
+- Open the file 'run' and change {A NAME HERE} in the line "EXEC_NAME={A NAME HERE}"
+to a custom executable name. In this guide we will refer to this name as 'UNAME'.
 
-Do you believe in test-driven development, or at the very lest — write your tests *together* with the feature code? If so you'd want to start your project pre-integrated with a good testing framework.
+- Open the file 'CMakeLists.txt' and change "CmakeTest" in the line "set ( PROJECT_NAME_ "CmakeTest" )" to the UNAME.
 
-Divider is a minimal project that's kept deliberately very small. When you build it using CMake/make (see below) it generates:
 
- 1. A tiny **static library** `lib/libdivision.a`,
- 2. **A command line binary `bin/divider`**, which links with the library,
- 3. **An executable unit test** `bin/divider_tests`  using [Google Test library](https://github.com/google/googletest).
- 4. **An optional BASH build script** `build-and-run` that you can use to quickly test if the project compiles, and runs.
-
-## Usage
-
-### Prerequisites
-
-You will need:
-
- * A modern C/C++ compiler
- * CMake 3.1+ installed (on a Mac, run `brew install cmake`)
- * If you prefer to code in a great IDE, I highly recommend [Jetbrains CLion](https://www.jetbrains.com/clion/). It is fully compatible with this project.
-
-### Building The Project
-
-#### Git Clone
-
-First we need to check out the git repo:
+## Usage:
+To test the program or use the build envoirments execute the following commands into the cloned folder
 
 ```bash
-❯ mkdir ~/workspace
-❯ cd ~/workspace
-❯ git clone \
-    https://github.com/kigster/cmake-project-template \
-    my-project
-❯ cd my-project
-❯ bash build-and-run
+### Only need to be performed once if no build folder present!
+mkdir build
+cd build 
+cmake ..
+
+cd ..
+
+### Needs to be performed anytime you updated the code. 
+
+## Compiling and Running the executable 
+./run 
+
+## if you get a premission error 
+sudo chmod +x run
+./run
+
 ```
 
-The output of this script is rather long and is shown [on this screenshot](doc/build-and-run.png).
+You can use source and header files from the include folder in the following ways:
+```c++
+#include <foo.hpp>
+#include <test/test.hpp>
+```
 
-The script `build-and-run` is a short-cut — you shouldn't really be using this script to build your project, but see how to do it properly below.
 
-#### Project Structure
+## Adding other sub-models (that use the include folder)
+1. Create a new folder in the cmake-workspace
+2. Edit the CMakeList.txt in the cmake-workspace and add the following code after line: " set ( INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" ) " 
+   - set ( <<NAME_OF_DIR>> "${CMAKE_CURRENT_SOURCE_DIR}/<<NAME_OF_FOLDER>>" )
+3. Edit the CMakeList.txt in the cmake-workspace/src and do the following:
+   - add the following code after the line: " include_directories( ${INCLUDE_DIR} ) "
+       - include_directories( ${<<NAME_OF_DIR>>} )
+   - add the following code aftr the line: " file( GLOB_RECURSE INCLUDES "${INCLUDE_DIR}/*.cc" "${INCLUDE_DIR}/*.cpp" "${INCLUDE_DIR}/*.hpp" "${INCLUDE_DIR}/*.c" "${INCLUDE_DIR}/*.h" ) "
+       - file( GLOB_RECURSE <<SOME_NAME>> "${<<NAME_OF_DIR>>}/*.cc" "${<<NAME_OF_DIR>>}/*.cpp" "${<<NAME_OF_DIR>>}/*.hpp" "${<<NAME_OF_DIR>>}/*.c" "${<<NAME_OF_DIR>>}/*.h" ) 
+   - append the content of line: " add_executable( ${MAIN_EXE_NAME} ${MAIN_SOURCES} ${SOURCES} ${INCLUDES} ) "
+       - So it becomes: " add_executable( ${MAIN_EXE_NAME} ${MAIN_SOURCES} ${SOURCES} ${INCLUDES} ${<<SOME_NAME>>} ) "
+4. Add the source code with folders etc to the new folder you made in step 1
+5. 
 
-There are three empty folders: `lib`, `bin`, and `include`. Those are populated by `make install`.
-
-The rest should be obvious: `src` is the sources, and `test` is where we put our unit tests.
-
-Now we can build this project, and below we show three separate ways to do so.
-
-#### Building Manually
+All submodules can use each others and the include folders source files in the same wa the src source files can use it. 
+So for example:
 
 ```bash
-❯ rm -rf build && mkdir build
-❯ cd build
-❯ cmake ..
-❯ make && make install
-❯ cd ..
+├── bin
+├── build
+├── CMakeLists.txt
+├── external_module --> the new module you created in step 1
+│   ├── hoi.cpp
+│   └── hoi.hpp
+├── include
+│   ├── lol
+│   │   ├── test2.cpp
+│   │   ├── test2.hpp
+│   │   ├── test.cpp
+│   │   └── test.hpp
+│   ├── test.cpp
+│   └── test.hpp
+└── src
+    ├── CMakeLists.txt
+    ├── main.cpp
+
 ```
 
+```c++
+// hoi.hpp
+#ifndef HOI_HPP
+#define HOI_HPP
 
-#### Running the tests
+#include <test.hpp>
+#include <lol/test.hpp>
 
-```bash
-❯ bin/divider_tests
-[==========] Running 5 tests from 1 test case.
-[----------] Global test environment set-up.
-[----------] 5 tests from DividerTest
-[ RUN      ] DividerTest.5_DivideBy_2
-[       OK ] DividerTest.5_DivideBy_2 (1 ms)
-[ RUN      ] DividerTest.9_DivideBy_3
-[       OK ] DividerTest.9_DivideBy_3 (0 ms)
-[ RUN      ] DividerTest.17_DivideBy_19
-[       OK ] DividerTest.17_DivideBy_19 (0 ms)
-[ RUN      ] DividerTest.Long_DivideBy_Long
-[       OK ] DividerTest.Long_DivideBy_Long (0 ms)
-[ RUN      ] DividerTest.DivisionByZero
-[       OK ] DividerTest.DivisionByZero (0 ms)
-[----------] 5 tests from DividerTest (1 ms total)
+class foo4{
+private:
+    foo bar;
+public: 
+    foo4();
+    int test();
 
-[----------] Global test environment tear-down
-[==========] 5 tests from 1 test case ran. (1 ms total)
-[  PASSED  ] 5 tests.
-```
+};
 
-#### Running the CLI Executable
+#endif //HOI_HPP
 
-Without arguments, it prints out its usage:
+// main.cpp
+#include <test.hpp>
+#include <lol/test2.hpp>
+#include <lol/test.hpp>
+#include <hoi.hpp>
 
-```bash
-❯ bin/divider
+int main(){
+    foo bar;
+    foo2 bar2;
+    foo3 bar3;
+    foo4 bar4;
 
-Divider © 2018 Monkey Claps Inc.
-
-Usage:
-	divider <numerator> <denominator>
-
-Description:
-	Computes the result of a fractional division,
-	and reports both the result and the remainder.
-```
-
-But with arguments, it computes as expected the denominator:
-
-```bash
-❯ bin/divider 112443477 12309324
-
-Divider © 2018 Monkey Claps Inc.
-
-Division : 112443477 / 12309324 = 9
-Remainder: 112443477 % 12309324 = 1659561
-```
-
-### Building in CLion
-
-> **NOTE**: Since JetBrains software [does not officially support git submodules](https://youtrack.jetbrains.com/issue/IDEA-64024), you must run `git submodule init && git submodule update` before starting CLion on a freshly checked-out repo.
-
-> **NOTE**: We recommend that you copy file `.idea/workspace.xml.example` into `.idea/workspace.xml` **before starting CLion**. It will provide a good starting point for your project's workspace.
-
-Assuming you've done the above two steps, you can start CLion, and open the project's top level folder. CLion should automatically detect the top level `CMakeLists.txt` file and provide you with the full set of build targets.
-
-Select menu option **Build   ➜ Build Project**, and then **Build ➜ Install**.
-
-![CLION](doc/cmake-clion.png)
-
-The above screenshot is an example of CLion with this project open.
-
-### Using it as a C++ Library
-
-We build a static library that, given a simple fraction will return the integer result of the division, and the remainder.
-
-We can use it from C++ like so:
-
-```cpp
-#include <iostream>
-#include <division>
-
-Fraction       f = Fraction{25, 7};
-DivisionResult r = Division(f).divide();
-
-std::cout << "Result of the division is " << r.division;
-std::cout << "Remainder of the division is " << r.remainder;
-```
-
-## File Locations
-
- * `src/*` — C++ code that ultimately compiles into a library
- * `test/lib` — C++ libraries used for tests (eg, Google Test)
- * `test/src` — C++ test suite
- * `bin/`, `lib`, `include` are all empty directories, until the `make install` install the project artifacts there.
-
-Tests:
-
- * A `test` folder with the automated tests and fixtures that mimics the directory structure of `src`.
- * For every C++ file in `src/A/B/<name>.cpp` there is a corresponding test file `test/A/B/<name>_test.cpp`
- * Tests compile into a single binary `test/bin/runner` that is run on a command line to run the tests.
- * `test/lib` folder with a git submodule in `test/lib/googletest`, and possibly other libraries.
-
-#### Contributing
-
-**Pull Requests are WELCOME!** Please submit any fixes or improvements, and I promise to review it as soon as I can at the project URL:
-
- * [Project Github Home](https://github.com/kigster/cmake-project-template)
- * [Submit Issues](https://github.com/kigster/cmake-project-template/issues)
- * [Pull Requests](https://github.com/kigster/cmake-project-template/pulls)
-
-### License
-
-&copy; 2017-2019 Konstantin Gredeskoul.
-
-Open sourced under MIT license, the terms of which can be read here — [MIT License](http://opensource.org/licenses/MIT).
-
-### Acknowledgements
-
-This project is a derivative of the [CMake Tutorial](https://cmake.org/cmake-tutorial/), and is aimed at saving time for starting new projects in C++ that use CMake and GoogleTest.
+    std::cout << bar.test();
+    std::cout << bar2.test();
+    std::cout << bar3.test();
+    std::cout << bar4.test();
+    
+    return 0;
+}
+``` 

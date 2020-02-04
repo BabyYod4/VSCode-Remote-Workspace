@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/lucidy/Custom/Gitlab/cmake-workspace/include/adapter.cpp
+adapter.h
+/home/lucidy/Custom/Gitlab/cmake-workspace/include/adapter.h
+
+/home/lucidy/Custom/Gitlab/cmake-workspace/include/adapter.h
+stdio.h
+-
+

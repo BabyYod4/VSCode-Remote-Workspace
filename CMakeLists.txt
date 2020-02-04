@@ -1,22 +1,32 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required( VERSION 2.8 )
 
-project(cmake-project-template)
+## Load CMAKE configuration from environment variables
+set( CMAKE_MODULE_PATH $ENV{CMAKE_MODULE_PATH} )
+set( CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH} )
+set ( INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" )
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
+## Set global variables
+#set(<<name>> "<<value>>")
+set ( PROJECT_NAME_ "CmakeTest" )
 
-set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
+## Specify a project name
+project( ${PROJECT_NAME_} )
+                       
+## Set the build type
+if( NOT CMAKE_BUILD_TYPE )
+  set( CMAKE_BUILD_TYPE "Release" 
+       CACHE STRING "Build configuration 'Release' or 'Debug'."
+       FORCE )
+endif()
 
-set(DIVISIBLE_INSTALL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
-set(DIVISIBLE_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin)
-set(DIVISIBLE_INSTALL_LIB_DIR ${PROJECT_SOURCE_DIR}/lib)
-
-set(DIVISION_HEADERS_DIR ${PROJECT_SOURCE_DIR}/src/division)
-
-include_directories(${DIVISIBLE_INSTALL_INCLUDE_DIR})
-include_directories(${DIVISION_HEADERS_DIR})
-
-add_subdirectory(src)
-add_subdirectory(test)
+## Install the executable to <install_directory>/bin
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+## Install libraries (if any) to <install_directory>/bin
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 
+## Set global definitions to be used in c++
+add_definitions(-DTEST_DEFINITION="Hello I am a global value in cmake")
+
+## Link Subdirectory 
+add_subdirectory(${PROJECT_SOURCE_DIR}/src bin)

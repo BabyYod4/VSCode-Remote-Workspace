@@ -1,0 +1,36 @@
+#!/bin/bash
+
+WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+BUILD_FOLDER=${WORKING_DIR}/build
+EXEC_FOLDER=${WORKING_DIR}/bin
+EXEC_NAME=CmakeTest
+
+echo -e "\e[33mBuilding Executable...."
+cd ${BUILD_FOLDER}
+cmake ..
+make -j
+
+if [ "$?" -ne "0" ]; then
+  echo -e "\e[33mMake Failed. Exiting Prorgam..."
+  exit 1
+fi
+
+
+echo -e "\e[32mDone building ${EXEC_NAME} !"
+
+echo -e "\e[35mWaiting to setup some thing...."
+
+# add your custom bash commands here 
+
+
+
+# ===================================
+
+echo -e "\e[33mRunning Executable..."
+echo -e "\e[39mDone!"
+
+cd ${EXEC_FOLDER}
+./${EXEC_NAME}.exe
+
+cd ..
+
