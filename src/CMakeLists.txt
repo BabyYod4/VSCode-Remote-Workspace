@@ -3,6 +3,7 @@ cmake_minimum_required( VERSION 2.8 )
 ## Sources and headers
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 #include_directories( "<<path/to/include/" )
+include_directories(${WIRINGPI_INCLUDE_DIRS}) 
 
 ## Find all source and header files to be compiled into object files
 file( GLOB_RECURSE SOURCES *.cc *.hh *.cpp *.hpp *.c *.h )
@@ -13,6 +14,9 @@ file( GLOB_RECURSE SOURCES *.cc *.hh *.cpp *.hpp *.c *.h )
 
 ## Find Required Packages
 # find_package(<<LibraryName>> REQUIRED)
+find_package(WiringPi REQUIRED)
+
+
 
 ## C++ compiler options
 
@@ -40,8 +44,9 @@ add_executable( ${MAIN_EXE_NAME} ${MAIN_SOURCE} ${SOURCES} )
 
 
 ## 2. Link...
-target_link_libraries( ${MAIN_EXE_NAME} )
+target_link_libraries( ${MAIN_EXE_NAME} ${WIRINGPI_LIBRARIES} )
 # target_link_libraries(${MAIN_EXE_NAME} <<Libraryname>> )
+
 
 
 ## 3. Install...

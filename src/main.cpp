@@ -1,9 +1,16 @@
-#include <iostream>
+
+
+#include <wiringPi.h>
 
 int main( void ) {
-  
-  std::cout << "Hello World!";
-  
-  return 0;
+  wiringPiSetup () ;
+  pinMode (0, OUTPUT) ;
+  for (int i=0; i<10; i++)
+  {
+    digitalWrite (0, HIGH) ; delay (500) ;
+    digitalWrite (0,  LOW) ; delay (500) ;
+  }
+
+    return 0;
 }
 

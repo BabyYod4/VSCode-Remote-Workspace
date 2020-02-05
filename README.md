@@ -1,11 +1,7 @@
 # VSCode Remote Workspace 
 
 ## Introduction:
-Normally the Platform IO workspace is used for microcontrollers like the Arduino UNO etc, but some microcontrollers like the RaspberryPi do not work natively with their corss compiler. For that reason, some of these microcontrollers will use a custom CMake workspace, but code wirtten in the LucidyAPI is cross compatible between PlatformIO and this CMake workspace. 
-
-There are different branches for each microcontroller so you have to configure less. 
-
-This is a simple cmake-template workspace to use in a CLI envoiment. The folder structure is as followed
+This is a cmake workspace for working with a RaspberryPi and Wiring Pi. The folder structure is as followed
 ```bash
 ├── bin --> contains executables
 ├── build --> contains build files makde by cmake 
@@ -19,6 +15,26 @@ This is a simple cmake-template workspace to use in a CLI envoiment. The folder 
 
 ## Before Usage:
 
+### Installing WiringPi
+`sudo apt-get install wiringpi`
+
+### Installing CMake
+`sudo apt-get install cmake`
+
+### Making CMake find WiringPi
+`cd /usr/share/cmake-XXX/Modules`
+- Here cmake-XXX is the version of cmake installed 
+`sudo nano FindWiringPi.cmake`
+- Add the following to the file and save with `Ctrl + X`: 
+    ```bash
+    find_library(WIRINGPI_LIBRARIES NAMES wiringPi)
+    find_path(WIRINGPI_INCLUDE_DIRS NAMES wiringPi.h)
+
+    include(FindPackageHandleStandardArgs)
+    find_package_handle_standard_args(wiringPi DEFAULT_MSG WIRINGPI_LIBRARIES WIRINGPI_INCLUDE_DIRS)
+    ```
+
+### *optional* Changing project name
 To use the workspace, you should take do the following. 
 
 In the workspace folder: 
