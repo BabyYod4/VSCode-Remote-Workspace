@@ -3,7 +3,7 @@
 ## Introduction:
 Normally the Platform IO workspace is used for microcontrollers like the Arduino UNO etc, but some microcontrollers like the RaspberryPi do not work natively with their corss compiler. For that reason, some of these microcontrollers will use a custom CMake workspace, but code wirtten in the LucidyAPI is cross compatible between PlatformIO and this CMake workspace. 
 
-There are different branches for each microcontroller so you have to configure less. 
+There are different branches for each microcontroller so you have to configure less. To be able to use Intellisense in VScode remotely you need to mount the remote device to a drive (for example with SSHFS, or the builtin Network Drive Tool in linux).
 
 This is a simple cmake-template workspace to use in a CLI envoiment. The folder structure is as followed
 ```bash
