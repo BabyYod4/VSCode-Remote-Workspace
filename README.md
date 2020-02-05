@@ -22,10 +22,10 @@ This is a cmake workspace for working with a RaspberryPi and Wiring Pi. The fold
 `sudo apt-get install cmake`
 
 ### Making CMake find WiringPi
-`cd /usr/share/cmake-XXX/Modules`
-- Here cmake-XXX is the version of cmake installed 
-`sudo nano FindWiringPi.cmake`
-- Add the following to the file and save with `Ctrl + X`: 
+1. `cd /usr/share/cmake-XXX/Modules`
+    - Here cmake-XXX is the version of cmake installed 
+2. `sudo nano FindWiringPi.cmake`
+    - Add the following to the file and save with `Ctrl + X`: 
     ```bash
     find_library(WIRINGPI_LIBRARIES NAMES wiringPi)
     find_path(WIRINGPI_INCLUDE_DIRS NAMES wiringPi.h)
