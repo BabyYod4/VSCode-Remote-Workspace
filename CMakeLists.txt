@@ -3,7 +3,6 @@ cmake_minimum_required( VERSION 2.8 )
 ## Load CMAKE configuration from environment variables
 set( CMAKE_MODULE_PATH $ENV{CMAKE_MODULE_PATH} )
 set( CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH} )
-set ( INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" )
 
 ## Set global variables
 #set(<<name>> "<<value>>")

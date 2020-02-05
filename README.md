@@ -1,24 +1,20 @@
-# cmake-workspace
+# VSCode Remote Workspace 
 
 ## Introduction:
+Normally the Platform IO workspace is used for microcontrollers like the Arduino UNO etc, but some microcontrollers like the RaspberryPi do not work natively with their corss compiler. For that reason, some of these microcontrollers will use a custom CMake workspace, but code wirtten in the LucidyAPI is cross compatible between PlatformIO and this CMake workspace. 
+
+There are different branches for each microcontroller so you have to configure less. 
+
 This is a simple cmake-template workspace to use in a CLI envoiment. The folder structure is as followed
 ```bash
 ├── bin --> contains executables
 ├── build --> contains build files makde by cmake 
-├── CMakeLists.txt --> contain global variables, etc
-├── include --> contains external source code from include submodule
-│   ├── foo.cpp
-│   ├── foo.hpp
-│   └── test
-│       ├── test.cpp
-│       └── test.hpp
-
 ├── lib --> contain generated and used library files
-├── README.md
-├── run --> used to compile and execute code
 └── src --> conains all base source code
     ├── CMakeLists.txt --> used to configure libary to work with source code 
     └── main.cpp
+├── run --> used to compile and execute code
+├── CMakeLists.txt --> contain global variables, etc
 ```
 
 ## Before Usage:
@@ -54,87 +50,56 @@ sudo chmod +x run
 
 ```
 
-You can use source and header files from the include folder in the following ways:
+You can use source and header files from the sub folder in the following ways:
 ```c++
-#include <foo.hpp>
-#include <test/test.hpp>
+#include "foo.hpp"
+#include "test/test.hpp"
 ```
 
-
-## Adding other sub-models (that use the include folder)
-1. Create a new folder in the cmake-workspace
-2. Edit the CMakeList.txt in the cmake-workspace and add the following code after line: " set ( INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" ) " 
-   - set ( <<NAME_OF_DIR>> "${CMAKE_CURRENT_SOURCE_DIR}/<<NAME_OF_FOLDER>>" )
-3. Edit the CMakeList.txt in the cmake-workspace/src and do the following:
-   - add the following code after the line: " include_directories( ${INCLUDE_DIR} ) "
-       - include_directories( ${<<NAME_OF_DIR>>} )
-   - add the following code aftr the line: " file( GLOB_RECURSE INCLUDES "${INCLUDE_DIR}/*.cc" "${INCLUDE_DIR}/*.cpp" "${INCLUDE_DIR}/*.hpp" "${INCLUDE_DIR}/*.c" "${INCLUDE_DIR}/*.h" ) "
-       - file( GLOB_RECURSE <<SOME_NAME>> "${<<NAME_OF_DIR>>}/*.cc" "${<<NAME_OF_DIR>>}/*.cpp" "${<<NAME_OF_DIR>>}/*.hpp" "${<<NAME_OF_DIR>>}/*.c" "${<<NAME_OF_DIR>>}/*.h" ) 
-   - append the content of line: " add_executable( ${MAIN_EXE_NAME} ${MAIN_SOURCES} ${SOURCES} ${INCLUDES} ) "
-       - So it becomes: " add_executable( ${MAIN_EXE_NAME} ${MAIN_SOURCES} ${SOURCES} ${INCLUDES} ${<<SOME_NAME>>} ) "
-4. Add the source code with folders etc to the new folder you made in step 1
-5. 
-
-All submodules can use each others and the include folders source files in the same wa the src source files can use it. 
-So for example:
-
-```bash
-├── bin
-├── build
-├── CMakeLists.txt
-├── external_module --> the new module you created in step 1
-│   ├── hoi.cpp
-│   └── hoi.hpp
-├── include
-│   ├── lol
-│   │   ├── test2.cpp
-│   │   ├── test2.hpp
-│   │   ├── test.cpp
-│   │   └── test.hpp
-│   ├── test.cpp
-│   └── test.hpp
-└── src
-    ├── CMakeLists.txt
-    ├── main.cpp
-
-```
+## Example Code
 
 ```c++
-// hoi.hpp
-#ifndef HOI_HPP
-#define HOI_HPP
+// foo.hpp
+#ifndef FOO_HPP
+#define FOO_HPP
 
-#include <test.hpp>
-#include <lol/test.hpp>
-
-class foo4{
+class foo{
 private:
-    foo bar;
+    int bar;
 public: 
-    foo4();
+    foo();
     int test();
 
 };
 
-#endif //HOI_HPP
+#endif //FOO_HPP
+
+// test/test.hpp
+#ifndef TEST_HPP
+#define TEST_HPP
+
+class test
+private:
+    int num;
+public: 
+    test();
+    int print();
+
+};
+
+#endif //TEST_HPP
 
 // main.cpp
-#include <test.hpp>
-#include <lol/test2.hpp>
-#include <lol/test.hpp>
-#include <hoi.hpp>
+#include "foo.hpp"
+#include "test/test.hpp"
 
 int main(){
     foo bar;
-    foo2 bar2;
-    foo3 bar3;
-    foo4 bar4;
-
-    std::cout << bar.test();
-    std::cout << bar2.test();
-    std::cout << bar3.test();
-    std::cout << bar4.test();
+    test t;
     
+    std::cout << foo.test();
+    std::cout << t.print();
+
     return 0;
 }
 ``` 

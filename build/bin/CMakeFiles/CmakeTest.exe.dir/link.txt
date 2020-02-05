@@ -1,1 +1,0 @@
-/usr/bin/c++  -Wall -Wextra -std=c++11 -L/usr/local/libs -O3  -rdynamic CMakeFiles/CmakeTest.exe.dir/main.c.o CMakeFiles/CmakeTest.exe.dir/__/include/adapter.cpp.o CMakeFiles/CmakeTest.exe.dir/__/include/c_file.c.o  -o ../../bin/CmakeTest.exe 
