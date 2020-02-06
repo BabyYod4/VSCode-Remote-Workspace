@@ -72,6 +72,23 @@ You can use source and header files from the sub folder in the following ways:
 #include "test/test.hpp"
 ```
 
+So your `src` folder can look like this:
+```bash
+...
+└── src
+    ├── test
+        ├── test.hpp
+        ├── test.cpp
+    ├── foo.hpp
+    ├── foo.cpp
+    ├── CMakeLists.txt
+    └── main.cpp
+...
+```
+
+Which means you can nest folders into sub folders into subfolders etc and the correct order will be kept in your includes. 
+I use a built in CMake recursive function called `file (GLOB_RECURSE VARIABLE *.h *.c *.hpp *.cpp *cc *.hh)` to find these files. 
+
 ## Example Code
 
 ```c++
