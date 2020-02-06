@@ -48,19 +48,11 @@ to a custom executable name. In this guide we will refer to this name as 'UNAME'
 To test the program or use the build envoirments execute the following commands into the cloned folder
 
 ```bash
-### Only need to be performed once if no build folder present!
-mkdir build
-cd build 
-cmake ..
-
-cd ..
-
-### Needs to be performed anytime you updated the code. 
 
 ## Compiling and Running the executable 
 ./run 
 
-## if you get a premission error 
+## if you get an error 
 sudo chmod +x run
 ./run
 
