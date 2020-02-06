@@ -1,8 +1,6 @@
 # VSCode Remote Workspace 
 
 ## Introduction:
-To be able to use Intellisense in VScode remotely you need to mount the remote device to a drive (for example with SSHFS, or the builtin Network Drive Tool in linux).
-
 This is a cmake workspace for working with a RaspberryPi and Wiring Pi. The folder structure is as followed
 ```bash
 ├── bin --> contains executables
